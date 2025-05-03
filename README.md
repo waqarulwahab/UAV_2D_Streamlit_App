@@ -77,6 +77,72 @@ The system uses two pre-trained models:
 1. **Isolation Forest**: For anomaly detection
 2. **Random Forest**: For attack classification
 
+## 🔍 System Logic and Implementation Details
+
+### Core Components
+
+1. **Signal Generation and Processing**
+   - Generates random samples using normal distribution for drone signals
+   - Processes 35 different signal features including noise, velocity, position, and satellite data
+   - Updates drone position along a predefined path
+
+2. **Anomaly Detection System**
+   - Uses Isolation Forest model to detect abnormal signal patterns
+   - Anomaly threshold can be adjusted via slider (0.0 to 10.0)
+   - Lower threshold values make the system more sensitive to anomalies
+   - Anomaly scores are compared against the negative threshold value
+
+3. **Attack Classification**
+   - When an anomaly is detected, the Random Forest classifies it as either:
+     - Spoofing Attack (0): Signal manipulation causing path deviation
+     - Jamming Attack (1): Signal interference causing position freezing
+   - Attack probability slider (0.0 to 1.0) controls the likelihood of attacks
+   - When set to 0, no attacks are generated regardless of anomaly detection
+
+4. **Visualization System**
+   - Real-time plotting of drone path and signal patterns
+   - Color-coded markers for different signal types:
+     - Green: Normal signals
+     - Red X: Spoofing attacks with dashed path
+     - Yellow Star: Jamming attacks
+   - Blue line shows planned path
+   - Green dot indicates current drone position
+
+5. **Data Management**
+   - Maintains a rolling log of signal data
+   - Implements marker lifetime system to remove old data points
+   - Tracks statistics for different signal types
+   - Provides real-time event logging
+
+6. **Simulation Control**
+   - Start button initiates the simulation
+   - Reset button clears all data and statistics
+   - Simulation speed controls the update frequency
+   - Theme selection for visualization customization
+
+### Technical Implementation
+
+1. **State Management**
+   - Uses Streamlit's session state to maintain simulation state
+   - Tracks: simulation running status, data log, attack counts, drone position
+   - Preserves visualization settings and theme preferences
+
+2. **Real-time Processing**
+   - Continuous loop for signal generation and processing
+   - Time-based updates controlled by simulation speed
+   - Asynchronous visualization updates
+
+3. **Data Structures**
+   - Pandas DataFrames for signal data management
+   - Dictionary-based attack count tracking
+   - List-based event logging with timestamping
+
+4. **Visualization Pipeline**
+   - Plotly for interactive plotting
+   - Dynamic figure updates based on real-time data
+   - Customizable themes and marker styles
+   - Responsive layout with container-based updates
+
 ## 🎨 Customization
 
 You can customize the visualization by:
@@ -112,6 +178,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
   
-Made with ❤️ by [Your Name]
+Made with ❤️ by WAQAR UL WAHAB
 
 </div> 

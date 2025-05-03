@@ -211,17 +211,16 @@ while True:
         anomaly_score = iso_forest.score_samples(sample_df)
         
         # Adjust anomaly detection to be more sensitive to attacks
-        # Higher threshold means more anomalies will be detected
-        threshold = anomaly_threshold * 0.3  # Scale the threshold
+        # Lower threshold means more anomalies will be detected
+        threshold = -anomaly_threshold  # Remove the 0.3 multiplier to make it more accurate
         
-        # Only consider attack probability if anomaly is detected
-        is_anomaly = anomaly_score > threshold
-        if is_anomaly and np.random.random() < attack_probability:
+        # Only introduce attacks if attack_probability is greater than 0
+        if attack_probability > 0 and np.random.random() < attack_probability:
             # Force an attack
             is_anomaly = True
         else:
             # Use normal anomaly detection
-            is_anomaly = anomaly_score > threshold
+            is_anomaly = anomaly_score < threshold
 
         if not is_anomaly:
             label = "Normal"
@@ -407,7 +406,7 @@ while True:
         # Add a break in the loop based on simulation speed
         time.sleep(simulation_speed)
     else:
-        # When simulation is not running, show the last plot if it exists
+        # When simulation is stopped, show the last plot
         if st.session_state.last_plot is not None:
             placeholder.plotly_chart(st.session_state.last_plot, use_container_width=True, key=f"stopped_plot_{datetime.now().timestamp()}")
-        time.sleep(0.1)  # Reduce CPU usage when simulation is not running
+        time.sleep(0.1)  # Reduce CPU usage when simulation is stopped
